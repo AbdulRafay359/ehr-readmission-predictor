@@ -1,15 +1,40 @@
-FROM python:3.10-slim
+# Use Python 3.11 slim image for smaller size
+FROM python:3.11-slim
 
-WORKDIR /app
+# Create a non-root user (required by Hugging Face Spaces)
+RUN useradd -m -u 1000 user
+USER user
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Set environment variables
+ENV HOME=/home/user \
+    PATH=/home/user/.local/bin:$PATH \
+    PYTHONUNBUFFERED=1 \
+    ENVIRONMENT=production \
+    HOST=0.0.0.0 \
+    PORT=7860 \
+    LOG_LEVEL=INFO \
+    MODEL_PATH=/home/user/app/models
 
-COPY . .
+# Set working directory
+WORKDIR $HOME/app
 
-ENV PYTHONPATH=/app
-ENV MODEL_PATH=/app/models
+# Copy requirements first for better Docker caching
+COPY --chown=user requirements.txt .
 
-EXPOSE 8000
+# Install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Copy application code and models
+COPY --chown=user app/ ./app/
+COPY --chown=user models/ ./models/
+
+# Hugging Face Spaces MUST run on port 7860
+EXPOSE 7860
+
+# Health check for Hugging Face
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:7860/health || exit 1
+
+# Run the FastAPI application
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "7860", "--workers", "1"]

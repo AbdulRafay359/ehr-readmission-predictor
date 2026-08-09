@@ -1,0 +1,16 @@
+{
+  "version": "2.0.0",
+  "training_date": "2026-08-09T15:56:42.871875",
+  "metrics": {
+    "accuracy": 0.6546624742065442,
+    "roc_auc": 0.667918538843821,
+    "f1_score": 0.27137970353477764
+  },
+  "n_features": 24,
+  "n_samples": 101766,
+  "scale_pos_weight": 7.960641014352381,
+  "class_distribution": {
+    "0": 90409,
+    "1": 11357
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "risk_levels": {
+    "very_low": {
+      "threshold": 0.0,
+      "label": "Very Low Risk"
+    },
+    "low": {
+      "threshold": 0.15,
+      "label": "Low Risk"
+    },
+    "medium": {
+      "threshold": 0.3,
+      "label": "Medium Risk"
+    },
+    "high": {
+      "threshold": 0.55,
+      "label": "High Risk"
+    },
+    "very_high": {
+      "threshold": 0.75,
+      "label": "Very High Risk"
+    }
+  },
+  "optimal_threshold": 0.30000000000000004,
+  "optimal_metrics": {
+    "precision": 0.532608695652174,
+    "recall": 0.98,
+    "f1": 0.6901408450704225
+  },
+  "model_version": "2.0.0",
+  "calibration_date": "2026-08-09T15:58:03.186794"
+}
