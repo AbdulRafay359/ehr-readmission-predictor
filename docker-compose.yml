@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - MONGO_DB_NAME=${MONGO_DB_NAME}
+      - MODEL_PATH=/app/models
+    volumes:
+      - ./models:/app/models
+    depends_on:
+      - mongodb
+    networks:
+      - ehr-net
+
+  mongodb:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_DATABASE=ehr_readmission_db
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - ehr-net
+
+volumes:
+  mongo_data:
+
+networks:
+  ehr-net:
