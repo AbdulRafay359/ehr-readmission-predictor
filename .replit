@@ -1,3 +1,12 @@
-run = ["uvicorn", "app.main:app", "--host=0.0.0.0", "--port=8000"]
-python = "3.10"
-LOG_LEVEL = "INFO"  #  Safe - just a log level
+run = "uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
+[deployment]
+run = "uvicorn app.main:app --host 0.0.0.0 --port 8000"
+deploymentTarget = "cloudrun"
+
+[[ports]]
+localPort = 8000
+externalPort = 80
+
+[env]
+LOG_LEVEL = "INFO"
